@@ -1,6 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('Category', {
-    id: DataTypes.INTEGER,
+    id: { 
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     name: DataTypes.STRING
   }, {
     tableName: 'categories',
