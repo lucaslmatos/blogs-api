@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Categorie', {
+  return sequelize.define('Category', {
+    id: DataTypes.INTEGER,
     name: DataTypes.STRING
   }, {
     tableName: 'categories',
