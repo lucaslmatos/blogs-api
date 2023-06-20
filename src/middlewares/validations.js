@@ -23,7 +23,7 @@ const checkJWT = async (payload) => {
   }
 };
 
-const checkNewUser = async (displayName, password, email) => {
+const checkNewUser = async (displayName = '', password = '', email = '') => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/;
   const user = await User.findOne({ where: { email } });
   if (displayName.length <= 7) {
@@ -41,8 +41,22 @@ const checkNewUser = async (displayName, password, email) => {
   return { type: null };
 };
 
+const validateToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  try {
+    JWT.verify(authorization, JWT_SECRET);
+    next();
+  } catch (e) {
+    return res.status(401).json({ message: 'Expired or invalid token' });
+  }
+};
+
 module.exports = {
   checkUser,
   checkJWT,
   checkNewUser,
+  validateToken,
 };

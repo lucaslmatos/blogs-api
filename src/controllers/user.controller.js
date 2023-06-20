@@ -8,6 +8,12 @@ const addUser = async (req, res) => {
   } return res.status(type).json({ message });
 };
 
+const getAllUsers = async (req, res) => {
+  const { type, message } = await user.getAllUsers();
+  return res.status(type).json(message);
+};
+
 module.exports = {
   addUser,
+  getAllUsers,
 };
