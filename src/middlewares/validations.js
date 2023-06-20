@@ -15,7 +15,7 @@ const checkUser = async (email, pas) => {
 };
 
 const checkJWT = async (payload) => {
-  const token = JWT.sign(payload, JWT_SECRET, { expiresIn: '15m' });
+  const token = JWT.sign(payload, JWT_SECRET, { expiresIn: '1h' });
   try {
     JWT.verify(token, JWT_SECRET); return { token };
   } catch (error) {
