@@ -6,10 +6,10 @@ const addCategory = async (name) => {
   return { type: 201, message: newCategory };
 };
 
-// const getAllUsers = async () => {
-//   const users = await User.findAll({ attributes: { exclude: ['password'] } });
-//   return { type: 200, message: users };
-// };
+const getAllCategories = async () => {
+  const categories = await Category.findAll();
+  return { type: 200, message: categories };
+};
 
 // const getUserById = async (id) => {
 //   const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
@@ -22,4 +22,5 @@ const addCategory = async (name) => {
 
 module.exports = {
   addCategory,
+  getAllCategories,
 };
