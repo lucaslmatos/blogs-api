@@ -24,12 +24,6 @@ const checkJWT = async (payload) => {
   }
 };
 
-// const getIdWithToken = async (token) => {
-//   const decoded = JWT.verify(token, JWT_SECRET);
-//   console.log(decoded);
-//   return decoded.id;
-// };
-
 const checkNewUser = async (displayName = '', password = '', email = '') => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/;
   const user = await User.findOne({ where: { email } });
