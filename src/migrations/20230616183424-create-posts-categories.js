@@ -3,15 +3,11 @@ module.exports = {
     await queryInterface.createTable('posts_categories', {
       post_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'blog_posts',
-        }
+        allowNull: false
       },
       category_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'categories',
-        }
+        allowNull: false
       }
     });
   },

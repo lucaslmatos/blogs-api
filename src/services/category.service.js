@@ -11,15 +11,6 @@ const getAllCategories = async () => {
   return { type: 200, message: categories };
 };
 
-// const getUserById = async (id) => {
-//   const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
-//   console.log(user);
-//   if (user === null) {
-//     return { type: 404, message: 'User does not exist' };
-//   }
-//   return { type: 200, message: user };
-// };
-
 module.exports = {
   addCategory,
   getAllCategories,

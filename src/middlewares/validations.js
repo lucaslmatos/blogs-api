@@ -1,5 +1,6 @@
 const JWT = require('jsonwebtoken');
 const { User } = require('../models');
+const { Category } = require('../models');
 
 const { JWT_SECRET } = process.env;
 
@@ -22,6 +23,12 @@ const checkJWT = async (payload) => {
     return { type: 403, message: 'invalid Token' };
   }
 };
+
+// const getIdWithToken = async (token) => {
+//   const decoded = JWT.verify(token, JWT_SECRET);
+//   console.log(decoded);
+//   return decoded.id;
+// };
 
 const checkNewUser = async (displayName = '', password = '', email = '') => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/;
@@ -61,10 +68,20 @@ const checkCategoryName = (req, res, next) => {
   } next();
 };
 
+const validateCategoryIds = async (req, res, next) => {
+  const { categoryIds } = req.body;
+  const validations = (await Promise.all(categoryIds
+    .map(async (id) => Category.findOne({ where: { id: +id } }))));
+  if (validations.includes(null)) {
+    return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+  } next();
+};
+
 module.exports = {
   checkUser,
   checkJWT,
   checkNewUser,
   validateToken,
   checkCategoryName,
+  validateCategoryIds,
 };
