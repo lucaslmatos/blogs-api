@@ -23,7 +23,26 @@ const checkJWT = async (payload) => {
   }
 };
 
+const checkNewUser = async (displayName, password, email) => {
+  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/;
+  const user = await User.findOne({ where: { email } });
+  if (displayName.length <= 7) {
+    return { type: 400, message: '"displayName" length must be at least 8 characters long' };
+  }
+  if (password.length <= 5) {
+    return { type: 400, message: '"password" length must be at least 6 characters long' };
+  }
+  if (!regex.test(email)) { 
+    return { type: 400, message: '"email" must be a valid email' }; 
+  }
+  if (user !== null) { 
+    return { type: 409, message: 'User already registered' }; 
+  }
+  return { type: null };
+};
+
 module.exports = {
   checkUser,
   checkJWT,
+  checkNewUser,
 };
