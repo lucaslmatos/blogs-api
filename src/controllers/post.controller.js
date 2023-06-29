@@ -1,3 +1,6 @@
+const JWT = require('jsonwebtoken');
+
+const { JWT_SECRET } = process.env;
 const post = require('../services/post.service');
 
 const addBlogPost = async (req, res) => {
@@ -21,8 +24,20 @@ const getBlogPostById = async (req, res) => {
   } return res.status(type).json({ message });
 };
 
+const editBlogPostById = async (req, res) => {
+  const { id } = req.params;
+  const info = req.body;
+  const { authorization } = req.headers;
+  const { uId } = JWT.verify(authorization, JWT_SECRET);
+  const { type, message } = await post.editBlogPostById(+id, uId, info);
+  if (type === null) {
+    return res.status(200).json(message);
+  } return res.status(type).json({ message });
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPosts,
   getBlogPostById,
+  editBlogPostById,
 };

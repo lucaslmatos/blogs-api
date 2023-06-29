@@ -1,3 +1,4 @@
+const { checkInfoForEdit } = require('../middlewares/validations');
 const { BlogPost, User, Category } = require('../models');
 const { addPostCategory } = require('./post.category.service');
 
@@ -47,8 +48,27 @@ const getBlogPostById = async (id) => {
   } return { type: null, message: post };
 };
 
+const editBlogPostById = async (id, uId, info) => {
+  const { type, message } = await checkInfoForEdit(id, uId, info);
+  if (type) {
+    return { type, message };
+  }
+  await BlogPost.update(info, { where: { id } });
+  const editedBlogPost = await BlogPost.findOne({
+    where: { id },
+    attributes: [
+      'id', 'title', 'content', 'published', 'updated', ['user_id', 'userId']],
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } }, 
+    { 
+      model: Category, as: 'categories', through: { attributes: [] } }],
+  }); 
+  return { type: null, message: editedBlogPost };
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPosts,
   getBlogPostById,
+  editBlogPostById,
 };

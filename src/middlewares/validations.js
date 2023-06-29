@@ -1,6 +1,5 @@
 const JWT = require('jsonwebtoken');
-const { User } = require('../models');
-const { Category } = require('../models');
+const { BlogPost, User, Category } = require('../models');
 
 const { JWT_SECRET } = process.env;
 
@@ -71,6 +70,17 @@ const validateCategoryIds = async (req, res, next) => {
   } next();
 };
 
+const checkInfoForEdit = async (id, userId, info) => {
+  if (!info.title || !info.content) {
+    return { type: 400, message: 'Some required fields are missing' };
+  }
+  const checkPost = await BlogPost.findOne({ where: { id } });
+  if (checkPost && +userId !== +checkPost.userId) {
+      return { type: 401, message: 'Unauthorized user' };
+  }
+  return { type: null };
+};
+
 module.exports = {
   checkUser,
   checkJWT,
@@ -78,4 +88,5 @@ module.exports = {
   validateToken,
   checkCategoryName,
   validateCategoryIds,
+  checkInfoForEdit,
 };
