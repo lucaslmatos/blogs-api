@@ -35,9 +35,20 @@ const editBlogPostById = async (req, res) => {
   } return res.status(type).json({ message });
 };
 
+const deleteBlogPostById = async (req, res) => {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  const { uId } = JWT.verify(authorization, JWT_SECRET);
+  const { type, message } = await post.deleteBlogPostById(+id, +uId);
+  if (type === null) {
+    return res.status(204).json();
+  } return res.status(type).json({ message });
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPosts,
   getBlogPostById,
   editBlogPostById,
+  deleteBlogPostById,
 };

@@ -70,12 +70,23 @@ const validateCategoryIds = async (req, res, next) => {
   } next();
 };
 
-const checkInfoForEdit = async (id, userId, info) => {
+const checkInfoForEdit = async (id, uId, info) => {
   if (!info.title || !info.content) {
     return { type: 400, message: 'Some required fields are missing' };
   }
   const checkPost = await BlogPost.findOne({ where: { id } });
-  if (checkPost && +userId !== +checkPost.userId) {
+  if (checkPost && +uId !== +checkPost.userId) {
+      return { type: 401, message: 'Unauthorized user' };
+  }
+  return { type: null };
+};
+
+const checkInfoForDelete = async (id, uId) => {
+  const checkPost = await BlogPost.findOne({ where: { id } });
+  if (!checkPost) {
+    return { type: 404, message: 'Post does not exist' };
+  }
+  if (checkPost && +uId !== +checkPost.userId) {
       return { type: 401, message: 'Unauthorized user' };
   }
   return { type: null };
@@ -89,4 +100,5 @@ module.exports = {
   checkCategoryName,
   validateCategoryIds,
   checkInfoForEdit,
+  checkInfoForDelete,
 };

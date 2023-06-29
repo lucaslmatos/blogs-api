@@ -1,4 +1,4 @@
-const { checkInfoForEdit } = require('../middlewares/validations');
+const { checkInfoForEdit, checkInfoForDelete } = require('../middlewares/validations');
 const { BlogPost, User, Category } = require('../models');
 const { addPostCategory } = require('./post.category.service');
 
@@ -66,9 +66,19 @@ const editBlogPostById = async (id, uId, info) => {
   return { type: null, message: editedBlogPost };
 };
 
+const deleteBlogPostById = async (id, uId) => {
+  const { type, message } = await checkInfoForDelete(+id, +uId);
+  if (type) {
+    return { type, message };
+  }
+  await BlogPost.destroy({ where: { id: +id } });
+  return { type: null };
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPosts,
   getBlogPostById,
   editBlogPostById,
+  deleteBlogPostById,
 };
