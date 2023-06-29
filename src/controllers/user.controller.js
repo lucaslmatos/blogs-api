@@ -1,3 +1,6 @@
+const JWT = require('jsonwebtoken');
+
+const { JWT_SECRET } = process.env;
 const user = require('../services/user.service');
 
 const addUser = async (req, res) => {
@@ -21,8 +24,16 @@ const getUserById = async (req, res) => {
   } return res.status(type).json({ message });
 };
 
+const deleteUser = async (req, res) => {
+  const { authorization } = req.headers;
+  const { uId } = JWT.verify(authorization, JWT_SECRET);
+  const { type } = await user.deleteUser(+uId);
+  return res.status(type).json();
+};
+
 module.exports = {
   addUser,
   getAllUsers,
   getUserById,
+  deleteUser,
 };
