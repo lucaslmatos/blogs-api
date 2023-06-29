@@ -2,12 +2,12 @@ const { checkInfoForEdit, checkInfoForDelete } = require('../middlewares/validat
 const { BlogPost, User, Category } = require('../models');
 const { addPostCategory } = require('./post.category.service');
 
-const addBlogPost = async ({ title, content, categoryIds }) => {
+const addBlogPost = async ({ title, content, categoryIds, uId }) => {
   if (!title || !content || !categoryIds) {
     return { type: 400, message: 'Some required fields are missing' };
   }
   const newBlogPost = await BlogPost.create({ 
-    title, content, userId: 1, published: new Date(), updated: new Date() });
+    title, content, userId: +uId, published: new Date(), updated: new Date() });
     (await Promise.all(categoryIds.map(async (e) => { 
       await addPostCategory(newBlogPost.id, e);
     })));
@@ -67,7 +67,7 @@ const editBlogPostById = async (id, uId, info) => {
 };
 
 const deleteBlogPostById = async (id, uId) => {
-  const { type, message } = await checkInfoForDelete(+id, +uId);
+  const { type, message } = await checkInfoForDelete(id, uId);
   if (type) {
     return { type, message };
   }

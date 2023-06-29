@@ -5,7 +5,9 @@ const post = require('../services/post.service');
 
 const addBlogPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
-  const { type, message } = await post.addBlogPost({ title, content, categoryIds });
+  const { authorization } = req.headers;
+  const { uId } = JWT.verify(authorization, JWT_SECRET);
+  const { type, message } = await post.addBlogPost({ title, content, categoryIds, uId });
   if (type === null) {
     return res.status(201).json(await message);
   } return res.status(type).json({ message });

@@ -86,7 +86,7 @@ const checkInfoForDelete = async (id, uId) => {
   if (!checkPost) {
     return { type: 404, message: 'Post does not exist' };
   }
-  if (checkPost && +uId !== +checkPost.userId) {
+  if (checkPost && uId !== checkPost.userId) {
       return { type: 401, message: 'Unauthorized user' };
   }
   return { type: null };
