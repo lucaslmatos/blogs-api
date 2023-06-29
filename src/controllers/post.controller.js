@@ -47,10 +47,18 @@ const deleteBlogPostById = async (req, res) => {
   } return res.status(type).json({ message });
 };
 
+const searchPosts = async (req, res) => {
+  const searched = req.query.q;
+  const { type, message } = await post.searchPosts(searched);
+  if (type === null) { return res.status(200).json(message); }
+  return res.status(type).json({ message });
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPosts,
   getBlogPostById,
   editBlogPostById,
   deleteBlogPostById,
+  searchPosts,
 };
